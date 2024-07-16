@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сброс пароля</title>
+    <title>Запрос на сброс пароля</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,19 +52,14 @@
 </head>
 <body>
     <div class="container">
-        <h2>Сброс пароля</h2>
-        <form id="resetPasswordForm">
+        <h2>Запрос на сброс пароля</h2>
+        <form id="resetPasswordRequestForm">
             <div class="form-group">
-                <label for="newPassword">Новый пароль:</label>
-                <input type="password" id="newPassword" required>
-                <div class="error" id="newPasswordError"></div>
+                <label for="email">Электронная почта:</label>
+                <input type="email" id="email" required>
+                <div class="error" id="emailError"></div>
             </div>
-            <div class="form-group">
-                <label for="confirmPassword">Подтвердите новый пароль:</label>
-                <input type="password" id="confirmPassword" required>
-                <div class="error" id="confirmPasswordError"></div>
-            </div>
-            <button type="submit">Сбросить пароль</button>
+            <button type="submit">Отправить запрос</button>
         </form>
     </div>
 
@@ -73,51 +68,32 @@
         const SUPABASE_KEY = 'your-anon-key';
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        document.getElementById('resetPasswordForm').addEventListener('submit', async function(event) {
+        document.getElementById('resetPasswordRequestForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+            const email = document.getElementById('email').value;
             let valid = true;
 
             // Clear previous error messages
-            document.getElementById('newPasswordError').innerText = '';
-            document.getElementById('confirmPasswordError').innerText = '';
+            document.getElementById('emailError').innerText = '';
 
-            // Validate new password
-            if (newPassword.length < 8) {
-                document.getElementById('newPasswordError').innerText = 'Пароль должен быть не менее 8 символов.';
-                valid = false;
-            }
-
-            // Validate password confirmation
-            if (newPassword !== confirmPassword) {
-                document.getElementById('confirmPasswordError').innerText = 'Пароли не совпадают.';
+            // Validate email
+            if (!email) {
+                document.getElementById('emailError').innerText = 'Введите корректный адрес электронной почты.';
                 valid = false;
             }
 
             if (valid) {
                 try {
-                    // Get the access token from the URL
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const accessToken = urlParams.get('access_token');
-
-                    if (!accessToken) {
-                        throw new Error('Access token is missing.');
-                    }
-
-                    // Use Supabase API to update the password
-                    const { data, error } = await supabase.auth.updateUser(accessToken, {
-                        password: newPassword
-                    });
+                    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
                     if (error) {
                         throw error;
                     }
 
-                    alert('Пароль успешно сброшен!');
+                    alert('Запрос на сброс пароля успешно отправлен! Проверьте свою электронную почту.');
                 } catch (error) {
-                    alert('Ошибка при сбросе пароля: ' + error.message);
+                    alert('Ошибка при отправке запроса на сброс пароля: ' + error.message);
                 }
             }
         });
