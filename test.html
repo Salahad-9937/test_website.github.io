@@ -85,7 +85,8 @@
 
             if (valid) {
                 try {
-                    const { data, error } = await supabase.auth.resetPasswordForEmail(email,{redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'});
+                    await supabase.auth.resetPasswordForEmail(email,{redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'});
+                    // const { data, error } = await supabase.auth.resetPasswordForEmail(email,{redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'});
 
                     if (error) {
                         throw error;
