@@ -48,7 +48,7 @@
             background-color: #0056b3;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -84,16 +84,20 @@
             }
 
             if (valid) {
+                console.log('Sending reset password request for:', email);
                 try {
-                    await supabase.auth.resetPasswordForEmail(email,{redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'});
-                    // const { data, error } = await supabase.auth.resetPasswordForEmail(email,{redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'});
+                    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                        redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'
+                    });
 
                     if (error) {
                         throw error;
                     }
 
+                    console.log('Reset password request sent:', data);
                     alert('Запрос на сброс пароля успешно отправлен! Проверьте свою электронную почту.');
                 } catch (error) {
+                    console.error('Ошибка при отправке запроса на сброс пароля:', error);
                     alert('Ошибка при отправке запроса на сброс пароля: ' + error.message);
                 }
             }
