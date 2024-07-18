@@ -64,43 +64,45 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://yppkcvfmdwyzdhfisflj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcGtjdmZtZHd5emRoZmlzZmxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMTY0MDEsImV4cCI6MjAyNjU5MjQwMX0.OcYaYbxtFVQSSGniXcQ0BaV4b1s1P-0KIXHyLuVPLDM';
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        document.addEventListener('DOMContentLoaded', function () {
+            const SUPABASE_URL = 'https://yppkcvfmdwyzdhfisflj.supabase.co';
+            const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcGtjdmZtZHd5emRoZmlzZmxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMTY0MDEsImV4cCI6MjAyNjU5MjQwMX0.OcYaYbxtFVQSSGniXcQ0BaV4b1s1P-0KIXHyLuVPLDM';
+            const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        document.getElementById('resetPasswordRequestForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            let valid = true;
+            document.getElementById('resetPasswordRequestForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
 
-            // Clear previous error messages
-            document.getElementById('emailError').innerText = '';
+                const email = document.getElementById('email').value;
+                let valid = true;
 
-            // Validate email
-            if (!email) {
-                document.getElementById('emailError').innerText = 'Введите корректный адрес электронной почты.';
-                valid = false;
-            }
+                // Clear previous error messages
+                document.getElementById('emailError').innerText = '';
 
-            if (valid) {
-                console.log('Sending reset password request for:', email);
-                try {
-                    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-                        redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'
-                    });
-
-                    if (error) {
-                        throw error;
-                    }
-
-                    console.log('Reset password request sent:', data);
-                    alert('Запрос на сброс пароля успешно отправлен! Проверьте свою электронную почту.');
-                } catch (error) {
-                    console.error('Ошибка при отправке запроса на сброс пароля:', error);
-                    alert('Ошибка при отправке запроса на сброс пароля: ' + error.message);
+                // Validate email
+                if (!email) {
+                    document.getElementById('emailError').innerText = 'Введите корректный адрес электронной почты.';
+                    valid = false;
                 }
-            }
+
+                if (valid) {
+                    console.log('Sending reset password request for:', email);
+                    try {
+                        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                            redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'
+                        });
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        console.log('Reset password request sent:', data);
+                        alert('Запрос на сброс пароля успешно отправлен! Проверьте свою электронную почту.');
+                    } catch (error) {
+                        console.error('Ошибка при отправке запроса на сброс пароля:', error);
+                        alert('Ошибка при отправке запроса на сброс пароля: ' + error.message);
+                    }
+                }
+            });
         });
     </script>
 </body>
