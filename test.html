@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Запрос на сброс пароля</title>
+    <title>Смена пароля</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,66 +48,67 @@
             background-color: #0056b3;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="container">
-        <h2>Запрос на сброс пароля</h2>
-        <form id="resetPasswordRequestForm">
+        <h2>Смена пароля</h2>
+        <form id="resetPasswordForm">
             <div class="form-group">
-                <label for="email">Электронная почта:</label>
-                <input type="email" id="email" required>
-                <div class="error" id="emailError"></div>
+                <label for="newPassword">Новый пароль:</label>
+                <input type="password" id="newPassword" required>
+                <div class="error" id="newPasswordError"></div>
             </div>
-            <button type="submit">Отправить запрос</button>
+            <div class="form-group">
+                <label for="confirmPassword">Подтвердите новый пароль:</label>
+                <input type="password" id="confirmPassword" required>
+                <div class="error" id="confirmPasswordError"></div>
+            </div>
+            <button type="submit">Сменить пароль</button>
         </form>
     </div>
 
-    <script type="module">
-        const { createClient } = supabase
-        const SUPABASE_URL = 'https://yppkcvfmdwyzdhfisflj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcGtjdmZtZHd5emRoZmlzZmxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMTY0MDEsImV4cCI6MjAyNjU5MjQwMX0.OcYaYbxtFVQSSGniXcQ0BaV4b1s1P-0KIXHyLuVPLDM';
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    <script>
+        document.getElementById('resetPasswordForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            let valid = true;
 
-        // const SUPABASE_URL = 'https://yppkcvfmdwyzdhfisflj.supabase.co';
-        // const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcGtjdmZtZHd5emRoZmlzZmxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMTY0MDEsImV4cCI6MjAyNjU5MjQwMX0.OcYaYbxtFVQSSGniXcQ0BaV4b1s1P-0KIXHyLuVPLDM';
-        // const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+            // Clear previous error messages
+            document.getElementById('newPasswordError').innerText = '';
+            document.getElementById('confirmPasswordError').innerText = '';
 
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('resetPasswordRequestForm').addEventListener('submit', async function(event) {
-                event.preventDefault();
+            // Validate new password
+            if (newPassword.length < 8) {
+                document.getElementById('newPasswordError').innerText = 'Пароль должен быть не менее 8 символов.';
+                valid = false;
+            }
 
-                const email = document.getElementById('email').value;
-                let valid = true;
+            // Validate password confirmation
+            if (newPassword !== confirmPassword) {
+                document.getElementById('confirmPasswordError').innerText = 'Пароли не совпадают.';
+                valid = false;
+            }
 
-                // Clear previous error messages
-                document.getElementById('emailError').innerText = '';
-
-                // Validate email
-                if (!email) {
-                    document.getElementById('emailError').innerText = 'Введите корректный адрес электронной почты.';
-                    valid = false;
-                }
-
-                if (valid) {
-                    console.log('Sending reset password request for:', email);
-                    try {
-                        const { data, error } = await _supabase.auth.resetPasswordForEmail(email, {
-                            redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'
-                        });
-
-                        if (error) {
-                            throw error;
-                        }
-
-                        console.log('Reset password request sent:', data);
-                        alert('Запрос на сброс пароля успешно отправлен! Проверьте свою электронную почту.');
-                    } catch (error) {
-                        console.error('Ошибка при отправке запроса на сброс пароля:', error);
-                        alert('Ошибка при отправке запроса на сброс пароля: ' + error.message);
-                    }
-                }
-            });
+            if (valid) {
+                // Here you can send the new password to your server for updating
+                alert('Пароль успешно изменен!');
+                // Example of sending data to the server
+                // fetch('/reset-password', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify({ password: newPassword })
+                // }).then(response => {
+                //     if (response.ok) {
+                //         alert('Пароль успешно изменен!');
+                //     } else {
+                //         alert('Ошибка при смене пароля.');
+                //     }
+                // });
+            }
         });
     </script>
 </body>

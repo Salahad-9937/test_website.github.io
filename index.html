@@ -48,7 +48,7 @@
             background-color: #0056b3;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="container">
@@ -63,39 +63,51 @@
         </form>
     </div>
 
-    <script>
+    <script type="module">
+        const { createClient } = supabase
         const SUPABASE_URL = 'https://yppkcvfmdwyzdhfisflj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcGtjdmZtZHd5emRoZmlzZmxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMTY0MDEsImV4cCI6MjAyNjU5MjQwMX0.OcYaYbxtFVQSSGniXcQ0BaV4b1s1P-0KIXHyLuVPLDM';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        document.getElementById('resetPasswordRequestForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            let valid = true;
+        // const SUPABASE_URL = 'https://yppkcvfmdwyzdhfisflj.supabase.co';
+        // const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwcGtjdmZtZHd5emRoZmlzZmxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEwMTY0MDEsImV4cCI6MjAyNjU5MjQwMX0.OcYaYbxtFVQSSGniXcQ0BaV4b1s1P-0KIXHyLuVPLDM';
+        // const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Clear previous error messages
-            document.getElementById('emailError').innerText = '';
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('resetPasswordRequestForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
 
-            // Validate email
-            if (!email) {
-                document.getElementById('emailError').innerText = 'Введите корректный адрес электронной почты.';
-                valid = false;
-            }
+                const email = document.getElementById('email').value;
+                let valid = true;
 
-            if (valid) {
-                try {
-                    const { data, error } = await supabase.auth.resetPasswordForEmail(email,{redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'});
+                // Clear previous error messages
+                document.getElementById('emailError').innerText = '';
 
-                    if (error) {
-                        throw error;
-                    }
-
-                    alert('Запрос на сброс пароля успешно отправлен! Проверьте свою электронную почту.');
-                } catch (error) {
-                    alert('Ошибка при отправке запроса на сброс пароля: ' + error.message);
+                // Validate email
+                if (!email) {
+                    document.getElementById('emailError').innerText = 'Введите корректный адрес электронной почты.';
+                    valid = false;
                 }
-            }
+
+                if (valid) {
+                    console.log('Sending reset password request for:', email);
+                    try {
+                        const { data, error } = await _supabase.auth.resetPasswordForEmail(email, {
+                            redirectTo: 'https://salahad-9937.github.io/test_website.github.io/change_password.html'
+                        });
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        console.log('Reset password request sent:', data);
+                        alert('Запрос на сброс пароля успешно отправлен! Проверьте свою электронную почту.');
+                    } catch (error) {
+                        console.error('Ошибка при отправке запроса на сброс пароля:', error);
+                        alert('Ошибка при отправке запроса на сброс пароля: ' + error.message);
+                    }
+                }
+            });
         });
     </script>
 </body>
