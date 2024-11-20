@@ -1,0 +1,94 @@
+/* Общие настройки */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Заголовки */
+h1, h2, h3 {
+    color: #222;
+}
+
+/* Ссылки */
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* Контейнер для текста */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Мини-содержание */
+#mini-toc {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+}
+#mini-toc h3 {
+    margin-top: 0;
+}
+#mini-toc ul {
+    list-style: none;
+    padding: 0;
+}
+#mini-toc ul li {
+    margin: 5px 0;
+}
+#mini-toc ul li a {
+    color: #0066cc;
+}
+#mini-toc .toggle {
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #666;
+    text-decoration: underline;
+}
+
+/* Кнопки навигации */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.nav-buttons a {
+    padding: 10px 20px;
+    border: 1px solid #0066cc;
+    background-color: #ffffff;
+    color: #0066cc;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+.nav-buttons a:hover {
+    background-color: #0066cc;
+    color: #ffffff;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    .container {
+        width: 100%;
+        margin: 10px;
+        padding: 15px;
+    }
+    .nav-buttons a {
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+}
